@@ -13,7 +13,6 @@
 
 const express = require('express');
 const path = require('path');
-const db = require('./db/db.json');
 const fs = require('fs');
 const uuid = require('./helpers/uuid');
 
@@ -29,7 +28,11 @@ app.use(express.static('public'));
 
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/public/')));
 app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, '/public/notes.html')));
-app.get('/api/notes', (req,res) => res.status(200).json(db));
+app.get('/api/notes', (req,res) => {
+    fs.readFile('./db/db.json',(err, data) =>{
+        res.status(200).json(JSON.parse(data));
+    })
+})
 
 app.post('/api/notes', (req, res) => {
     console.info(`${req.method} request received to add a review`);
@@ -42,7 +45,6 @@ app.post('/api/notes', (req, res) => {
             text,
             id: uuid(),
         };
-        console.log(db);
         //read file must be of type string
         fs.readFile('./db/db.json', (err, data) => {
             if(err) {
@@ -58,6 +60,7 @@ app.post('/api/notes', (req, res) => {
                         console.error(writeErr);
                         res.send("Update Write Error");
                     } else{
+                        console.log("Update Complete");
                         res.send("Update Complete");
                     }
                  }    
@@ -69,7 +72,7 @@ app.post('/api/notes', (req, res) => {
     }
 });
 
-app.delete('/api/notes:id', (req, res) => {
+app.delete('/api/notes/:id', (req, res) => {
     res.status(200);
     console.log("Pikachu");
     // if(req.params.id) {

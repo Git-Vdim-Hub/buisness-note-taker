@@ -27,5 +27,15 @@
       "title": "Books",
       "text": "I like them",
       "note_id": "d4d5"
+   },
+   {
+      "title": "Lex",
+      "text": "Lex is a good TA",
+      "note_id": "212b"
+   },
+   {
+      "title": "Cats",
+      "text": "Are cool",
+      "note_id": "2e8d"
    }
 ]

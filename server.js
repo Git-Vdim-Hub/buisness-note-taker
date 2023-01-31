@@ -29,7 +29,7 @@ app.use(express.static('public'));
 
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/public/')));
 app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, '/public/notes.html')));
-app.get('/api/notes', (req,res) => res.json(db));
+app.get('/api/notes', (req,res) => res.status(200).json(db));
 
 app.post('/api/notes', (req, res) => {
     console.info(`${req.method} request received to add a review`);
@@ -60,13 +60,13 @@ app.post('/api/notes', (req, res) => {
                 ); 
             }
         });   
-    // const response = {
-    //      status: 'success',
-    //      body: newNote,
-    //   };
+    const response = {
+         status: 'success',
+         body: newNote,
+      };
 
-    //    console.log(response);
-    // res.status(201).json(response);
+       console.log(response);
+    res.status(201).json(response);
     
     } else {
         res.status(500).json('Unable to post review');

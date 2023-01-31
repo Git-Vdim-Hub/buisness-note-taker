@@ -1,6 +1,10 @@
 [
     {
-        "title":"Pikachu Title",
-        "text":"Pika Pika Chuuuu"
+        "title":"Test Title",
+        "text":"Test text"
+    },
+    {
+        "title":"Pikachu",
+        "text":"Pika Pika"
     }
 ]

@@ -40,7 +40,7 @@ app.post('/api/notes', (req, res) => {
         const newNote = {
             title,
             text,
-            note_id: uuid(),
+            id: uuid(),
         };
         console.log(db);
         //read file must be of type string
@@ -53,25 +53,40 @@ app.post('/api/notes', (req, res) => {
                 parsedNotes.push(newNote);
 
                 fs.writeFile('./db/db.json', JSON.stringify(parsedNotes, null, 3),
-                 (writeErr) =>
-                    writeErr 
-                    ? console.error(writeErr) 
-                    : console.info("Update Complete")
+                 (writeErr) => {
+                    if(writeErr){
+                        console.error(writeErr);
+                        res.send("Update Write Error");
+                    } else{
+                        res.send("Update Complete");
+                    }
+                 }    
                 ); 
             }
         });   
-    const response = {
-         status: 'success',
-         body: newNote,
-      };
-
-       console.log(response);
-    res.status(201).json(response);
-    
     } else {
         res.status(500).json('Unable to post review');
     }
 });
+
+app.delete('/api/notes:id', (req, res) => {
+    res.status(200);
+    console.log("Pikachu");
+    // if(req.params.id) {
+        //res.redirect('back');
+    //     console.info(`${req.method} request recieved to delete a note`);
+    //     const noteId = req.params.id;
+    //     console.log(noteId);
+    //     const response = {
+    //         status: 'success',
+    //         body: newNote,
+    //      };
+   
+    //       console.log(response);
+    //    res.status(201).json(response)
+    // }
+})
+//app.delete('/:id', (req, res) => res.json(`DELETE route`));
 
 app.listen(PORT, () =>
 console.log(`App listening at http://localhost:${PORT} 🚀`)

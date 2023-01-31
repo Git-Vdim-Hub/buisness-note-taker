@@ -14,6 +14,8 @@
 const express = require('express');
 const path = require('path');
 const db = require('./db/db.json');
+const fs = require('fs');
+const uuid = require('./helpers/uuid');
 
 const PORT = 5500;
 
@@ -21,18 +23,55 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extened: true }));
-
 app.use(express.static('public'));
 
 
 
-app.get('/api/notes', (req,res) => {
-    console.log("PikaPika")
-    res.json(db);
-})
-
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/public/')));
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/public/')));
 app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, '/public/notes.html')));
+app.get('/api/notes', (req,res) => res.json(db));
+
+app.post('/api/notes', (req, res) => {
+    console.info(`${req.method} request received to add a review`);
+
+    const {title, text} = req.body;
+    console.log(title);
+    if(title && text){
+        const newNote = {
+            title,
+            text,
+            note_id: uuid(),
+        };
+        console.log(db);
+        //read file must be of type string
+        fs.readFile('./db/db.json', (err, data) => {
+            if(err) {
+                console.error(err);
+            } else {
+                const parsedNotes = JSON.parse(data);
+
+                parsedNotes.push(newNote);
+
+                fs.writeFile('./db/db.json', JSON.stringify(parsedNotes, null, 3),
+                 (writeErr) =>
+                    writeErr 
+                    ? console.error(writeErr) 
+                    : console.info("Update Complete")
+                ); 
+            }
+        });   
+    // const response = {
+    //      status: 'success',
+    //      body: newNote,
+    //   };
+
+    //    console.log(response);
+    // res.status(201).json(response);
+    
+    } else {
+        res.status(500).json('Unable to post review');
+    }
+});
 
 app.listen(PORT, () =>
 console.log(`App listening at http://localhost:${PORT} 🚀`)

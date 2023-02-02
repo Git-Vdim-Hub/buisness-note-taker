@@ -1,3 +1,4 @@
+
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -13,8 +14,9 @@ app.use(express.static('public'));
 
 
 
-app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/public/')));
+
 app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, '/public/notes.html')));
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/public/')));
 app.get('/api/notes', (req,res) => {
     fs.readFile('./db/db.json',(err, data) =>{
         res.status(200).json(JSON.parse(data));
@@ -63,7 +65,6 @@ app.delete('/api/notes/:id', (req, res) => {
             console.log (err);
         } else {
             const parsedDeleteNotes = JSON.parse(data);
-            console.log(parsedDeleteNotes);
             for(let i = 0; i<parsedDeleteNotes.length; i++){
                 if(parsedDeleteNotes[i].id == checkId){
                     parsedDeleteNotes.splice(i,1);
@@ -82,9 +83,7 @@ app.delete('/api/notes/:id', (req, res) => {
            );
         }
     });
-})
-//app.delete('/:id', (req, res) => res.json(`DELETE route`));
+});
 
 app.listen(PORT, () =>
-console.log(`App listening at http://localhost:${PORT} 🚀`)
-);
+console.log(`App listening at http://localhost:${PORT} 🚀`));

@@ -1,22 +1,9 @@
-//PSEUDO CODE
-//Server JS
-//FIGRURE OUT HOW TO WORK WITH TWO HTML FILES/CHECK LESSONS
-//2. we need a post and a get to api/notes (delete bonus)
-//-when talking post or get we are talking from client view
-//so we are getting data from the server and we are posting data
-//to the server
-//2a. get- need to get the page
-//we are working with a db that is is in the file tree with .json ext
-//so use .json
-//3. we also need the bodies for those two/three
-//4
-
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const uuid = require('./helpers/uuid');
 
-const PORT = 5500;
+const PORT = process.env.PORT || 5500;
 
 const app = express();
 
@@ -36,9 +23,7 @@ app.get('/api/notes', (req,res) => {
 
 app.post('/api/notes', (req, res) => {
     console.info(`${req.method} request received to add a review`);
-
     const {title, text} = req.body;
-    console.log(title);
     if(title && text){
         const newNote = {
             title,
@@ -51,9 +36,7 @@ app.post('/api/notes', (req, res) => {
                 console.error(err);
             } else {
                 const parsedNotes = JSON.parse(data);
-
                 parsedNotes.push(newNote);
-
                 fs.writeFile('./db/db.json', JSON.stringify(parsedNotes, null, 3),
                  (writeErr) => {
                     if(writeErr){
@@ -73,21 +56,32 @@ app.post('/api/notes', (req, res) => {
 });
 
 app.delete('/api/notes/:id', (req, res) => {
-    res.status(200);
-    console.log("Pikachu");
-    // if(req.params.id) {
-        //res.redirect('back');
-    //     console.info(`${req.method} request recieved to delete a note`);
-    //     const noteId = req.params.id;
-    //     console.log(noteId);
-    //     const response = {
-    //         status: 'success',
-    //         body: newNote,
-    //      };
-   
-    //       console.log(response);
-    //    res.status(201).json(response)
-    // }
+    console.info(`${req.method} request recieved to add a review`);
+    const checkId = req.params.id;
+    fs.readFile('./db/db.json', (err, data) =>{
+        if(err){
+            console.log (err);
+        } else {
+            const parsedDeleteNotes = JSON.parse(data);
+            console.log(parsedDeleteNotes);
+            for(let i = 0; i<parsedDeleteNotes.length; i++){
+                if(parsedDeleteNotes[i].id == checkId){
+                    parsedDeleteNotes.splice(i,1);
+                }
+            }
+
+            fs.writeFile('./db/db.json', JSON.stringify(parsedDeleteNotes, null, 3),
+            (writeErr) => {
+               if(writeErr){
+                   console.error(writeErr);
+                   res.send("Update Write Error");
+               } else{
+                   res.send("Update Complete");
+               }
+            }    
+           );
+        }
+    });
 })
 //app.delete('/:id', (req, res) => res.json(`DELETE route`));
 

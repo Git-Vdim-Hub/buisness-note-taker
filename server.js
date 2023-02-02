@@ -16,7 +16,6 @@ app.use(express.static('public'));
 
 
 app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, '/public/notes.html')));
-app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/public/')));
 app.get('/api/notes', (req,res) => {
     fs.readFile('./db/db.json',(err, data) =>{
         res.status(200).json(JSON.parse(data));
@@ -85,5 +84,6 @@ app.delete('/api/notes/:id', (req, res) => {
     });
 });
 
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, '/public/')));
 app.listen(PORT, () =>
 console.log(`App listening at http://localhost:${PORT} 🚀`));

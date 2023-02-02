@@ -25,7 +25,7 @@ node server.js
 Instructions and examples for use including screenshots and github repo/page.
 
 - Click link to view repo: [Github Repo](https://github.com/Git-Vdim-Hub/buisness-note-taker)
-- Click link to view deployed webpage on [Heroku](https://buisness-note-taker.herokuapp.com/)
+- Click link to view deployed webpage on [Heroku](https://fathomless-garden-23793.herokuapp.com/)
 - Screenshots: ![Splash Page](./public/assets/images/screencapture.png)
     ![Note Taker](./public/assets/images/screencapture2.png)
 
